@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentMate API", "RentMate API\RentMate API.csproj", "{8EA3F722-AB2F-473A-8ADC-4A9DCF967E6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{08288BDA-80BE-4968-9860-44A6F697AA47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentMate Domain", "RentMate Domain\RentMate Domain.csproj", "{62447C95-7B51-431A-8601-E9DB1C2D69D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentMate Repository", "RentMate Repository\RentMate Repository.csproj", "{B3A8E26E-3D1C-4322-845C-A06367190722}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentMate Service", "RentMate Service\RentMate Service.csproj", "{8A4D32D0-D343-43A7-BF00-00DD01B06AD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EA3F722-AB2F-473A-8ADC-4A9DCF967E6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA3F722-AB2F-473A-8ADC-4A9DCF967E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA3F722-AB2F-473A-8ADC-4A9DCF967E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA3F722-AB2F-473A-8ADC-4A9DCF967E6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62447C95-7B51-431A-8601-E9DB1C2D69D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62447C95-7B51-431A-8601-E9DB1C2D69D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62447C95-7B51-431A-8601-E9DB1C2D69D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62447C95-7B51-431A-8601-E9DB1C2D69D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A8E26E-3D1C-4322-845C-A06367190722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A8E26E-3D1C-4322-845C-A06367190722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A8E26E-3D1C-4322-845C-A06367190722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A8E26E-3D1C-4322-845C-A06367190722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4D32D0-D343-43A7-BF00-00DD01B06AD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4D32D0-D343-43A7-BF00-00DD01B06AD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4D32D0-D343-43A7-BF00-00DD01B06AD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A4D32D0-D343-43A7-BF00-00DD01B06AD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8EA3F722-AB2F-473A-8ADC-4A9DCF967E6E} = {08288BDA-80BE-4968-9860-44A6F697AA47}
+		{62447C95-7B51-431A-8601-E9DB1C2D69D2} = {08288BDA-80BE-4968-9860-44A6F697AA47}
+		{B3A8E26E-3D1C-4322-845C-A06367190722} = {08288BDA-80BE-4968-9860-44A6F697AA47}
+		{8A4D32D0-D343-43A7-BF00-00DD01B06AD1} = {08288BDA-80BE-4968-9860-44A6F697AA47}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3C2F9B2-178C-4D33-A4C8-A03782795AA8}
+	EndGlobalSection
+EndGlobal

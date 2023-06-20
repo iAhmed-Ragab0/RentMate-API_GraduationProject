@@ -1,0 +1,14 @@
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.csproj.AssemblyReference.cache
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.AssemblyInfoInputs.cache
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.AssemblyInfo.cs
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.csproj.CoreCompileInputs.cache
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\bin\Debug\net6.0\RentMate Domain.deps.json
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\bin\Debug\net6.0\RentMate Domain.runtimeconfig.json
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\bin\Debug\net6.0\RentMate Domain.dll
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\bin\Debug\net6.0\RentMate Domain.pdb
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.dll
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\refint\RentMate Domain.dll
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.pdb
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\RentMate Domain.genruntimeconfig.cache
+D:\ITI\100- Final Rent Mate\RentMate API\RentMate Domain\obj\Debug\net6.0\ref\RentMate Domain.dll
