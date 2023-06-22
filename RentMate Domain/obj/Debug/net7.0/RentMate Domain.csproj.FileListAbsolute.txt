@@ -26,3 +26,17 @@ D:\ITI\100- Rent Mate\RentMate API\RentMate Domain\obj\Debug\net7.0\refint\RentM
 D:\ITI\100- Rent Mate\RentMate API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.pdb
 D:\ITI\100- Rent Mate\RentMate API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.genruntimeconfig.cache
 D:\ITI\100- Rent Mate\RentMate API\RentMate Domain\obj\Debug\net7.0\ref\RentMate Domain.dll
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\bin\Debug\net7.0\RentMate Domain.deps.json
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\bin\Debug\net7.0\RentMate Domain.runtimeconfig.json
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\bin\Debug\net7.0\RentMate Domain.dll
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\bin\Debug\net7.0\RentMate Domain.pdb
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.csproj.AssemblyReference.cache
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.AssemblyInfoInputs.cache
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.AssemblyInfo.cs
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.csproj.CoreCompileInputs.cache
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.dll
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\refint\RentMate Domain.dll
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.pdb
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\RentMate Domain.genruntimeconfig.cache
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate Domain\obj\Debug\net7.0\ref\RentMate Domain.dll
