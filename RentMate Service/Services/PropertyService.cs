@@ -43,9 +43,7 @@ namespace RentMate_Service.Services
             var includes = new Expression<Func<Propertyy, object>>[]
              {
                 p => p.Owner,
-                p => p.Photos,
-                p=>p.City,
-                p=>p.City.Governorate
+                p => p.Photos
              };
 
             var properties = await _PropertyRepository.GetAllAsync(includes);
@@ -57,8 +55,8 @@ namespace RentMate_Service.Services
                 PropertyDTO_GetAll prp = new PropertyDTO_GetAll();
 
                 prp.Street = property.Street;
-                prp.City = property.City.city_name_en;
-                prp.Governorate = property.City.Governorate.governorate_name_en;
+                prp.City = property.City;
+                prp.Governorate = property.Governorate;
                 prp.Id = property.Id;
                 prp.PropertyType = property.PropertyType;
                 prp.Title = property.Title;
@@ -93,47 +91,43 @@ namespace RentMate_Service.Services
             };
 
             var property = await _PropertyRepository.GetByIdAsync(_id, includes) ?? default;
-            if (property == null)
-                return null;
-            else
+
+            PropertyDTO_GetById propOwner = new PropertyDTO_GetById()
             {
-                PropertyDTO_GetById propOwner = new PropertyDTO_GetById()
-                {
-                    OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName,
-                    OwnerProfileImg = property.Owner.ProfileImg,
-                    OwnerEmail = property.Owner.Email,
-                    OwnerPhone = property.Owner.PhoneNumber,
+                OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName,
+                OwnerProfileImg = property.Owner.ProfileImg  ,
+                OwnerEmail = property.Owner.Email,
+                OwnerPhone = property.Owner.PhoneNumber,
 
-                    // Property 
-                    Id = property.Id,
-                    Title = property.Title,
-                    NoOfBedsInTheRoom = property.NoOfBedsInTheRoom,
-                    NoOfBedsPerApartment = property.NoOfBedsPerApartment,
-                    NoOfRooms = property.NoOfRooms,
-                    City = property.City.city_name_en,
-                    Governorate = property.City.Governorate.governorate_name_en,
-                    Description = property.Description,
-                    Street = property.Street,
-                    PropertyType = property.PropertyType,
-                    IsRented = property.IsRented,
-                    Photos = property.Photos.ToList(),
-                    hasKitchen = property.Details.hasKitchen,
-                    hasAirConditioner = property.Details.hasAirConditioner,
-                    hasMicrowave = property.Details.hasMicrowave,
-                    hasDishesAndSilverware = property.Details.hasDishesAndSilverware,
-                    hasWifi = property.Details.hasWifi,
-                    hasDishWasher = property.Details.hasDishWasher,
-                    hasParking = property.Details.hasParking,
-                    hasRefrigerator = property.Details.hasRefrigerator,
-                    hasWaterHeater = property.Details.hasWaterHeater,
-                    PropertyPrice = property.PropertyPrice,
-                    // Reviews
-                    Reviews = property.Reviews.ToList(),
-                    //AverageRating = AverageRating(property.Id),
-                };
+                // Property 
+                Id = property.Id,
+                Title = property.Title,
+                NoOfBedsInTheRoom = property.NoOfBedsInTheRoom,
+                NoOfBedsPerApartment = property.NoOfBedsPerApartment,
+                NoOfRooms = property.NoOfRooms,
+                City = property.City,
+                Governorate = property.Governorate,
+                Description = property.Description,
+                Street = property.Street,
+                PropertyType = property.PropertyType,
+                IsRented = property.IsRented,
+                Photos = property.Photos.ToList(),
+                hasKitchen = property.Details.hasKitchen,
+                hasAirConditioner = property.Details.hasAirConditioner,
+                hasMicrowave = property.Details.hasMicrowave,
+                hasDishesAndSilverware = property.Details.hasDishesAndSilverware,
+                hasWifi = property.Details.hasWifi,
+                hasDishWasher = property.Details.hasDishWasher,
+                hasParking = property.Details.hasParking,
+                hasRefrigerator = property.Details.hasRefrigerator,
+                hasWaterHeater = property.Details.hasWaterHeater,
+                PropertyPrice = property.PropertyPrice,
+                // Reviews
+                Reviews = property.Reviews.ToList(),
+                //AverageRating = AverageRating(property.Id),
+            };
 
-                return propOwner;
-            }
+            return propOwner;
         }
 
         //----------------------------------------------------------------------
@@ -153,8 +147,8 @@ namespace RentMate_Service.Services
                 prp.Title = property.Title;
                 prp.PropertyPrice = property.PropertyPrice;
                 prp.PropertyType = property.PropertyType;
-                prp.Governorate = property.City.Governorate.governorate_name_en;
-                prp.City = property.City.city_name_en;
+                prp.Governorate = property.Governorate;
+                prp.City = property.City;
                 prp.Street = property.Street;
                 prp.Description = property.Description;
                 prp.IsRented = property.IsRented;
@@ -183,8 +177,8 @@ namespace RentMate_Service.Services
                 Title = PropertyDTO.Title,
                 PropertyType = PropertyDTO.PropertyType,
                 PropertyPrice = PropertyDTO.PropertyPrice,
-                //GovernorateId = PropertyDTO.City.Governorate.governorate_name_en,
-                //CityId = PropertyDTO.CityId,
+                Governorate = PropertyDTO.Governorate,
+                City = PropertyDTO.City,
                 Street = PropertyDTO.Street,
                 Description = PropertyDTO.Description,
                 NoOfBedsPerApartment = PropertyDTO.NoOfBedsPerApartment,

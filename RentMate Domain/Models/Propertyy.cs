@@ -21,15 +21,14 @@ namespace RentMate_Domain.Models
         public Property_Type PropertyType { get; set; }
         public decimal PropertyPrice { get; set; }
 
-
-
+        public string Governorate { get; set; }
+        public string City { get; set; }
         public string Street { get; set; }
+
         public string Description { get; set; }
         public int NoOfRooms { get; set; }
         public int NoOfBedsInTheRoom { get; set; }
         public int NoOfBedsPerApartment { get; set; }
-        public int NoOfBathroom { get; set; }
-        public int AppartmentArea { get; set; }
         public bool IsRented { get; set; }
 
 
@@ -43,6 +42,7 @@ namespace RentMate_Domain.Models
         //FK for the tables
 
         [ForeignKey("Owner")]
+
         public string OwnerId { get; set; }
 
         [ForeignKey("Tenant")]
@@ -52,23 +52,9 @@ namespace RentMate_Domain.Models
         public int? DetailsId { get; set; }
 
 
-
-
-
-        //Address
-        public int CityId { get; set; }
-        public City City { get; set; }
-
-        //public int GovernorateId { get; set; }
-        //public Governorate Governorate { get; set; }
-
-
         //nav property
         public virtual User Owner { get; set; }
         public virtual User Tenant { get; set; }
-
-
-
         public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
         public virtual PropertyDetails Details { get; set; } = new PropertyDetails();

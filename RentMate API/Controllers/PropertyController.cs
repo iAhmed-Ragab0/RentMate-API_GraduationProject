@@ -44,11 +44,7 @@ namespace RentMate_API.Controllers
             try
             {
                 var result = await _PropertyService.GetPropertyByIdAsync(id) ?? default;
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
-
+                return Ok(result);
             }
             catch (Exception ex)
             {

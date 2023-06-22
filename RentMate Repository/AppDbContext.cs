@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,8 +21,6 @@ namespace RentMate_Domain
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<WishingList> WishingList { get; set; }
         public virtual DbSet<Photo> Photos { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Governorate> Governorates { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
         {
         }
@@ -34,7 +31,7 @@ namespace RentMate_Domain
 
             //Identity Tables Name
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<IdentityRole>().ToTable("Roles", "security");
+            modelBuilder.Entity<IdentityRole>().ToTable("Roles","security");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", "security");
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims", "security");
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins", "security");
@@ -90,10 +87,6 @@ namespace RentMate_Domain
                         .Property(b => b.NoOfRooms)
                         .HasDefaultValue(1);
 
-            modelBuilder.Entity<Propertyy>()
-                        .Property(b => b.NoOfBathroom)
-                        .HasDefaultValue(1);
-
 
             // proprty photo & Reviews cycle problem
             modelBuilder.Entity<Propertyy>()
@@ -111,43 +104,6 @@ namespace RentMate_Domain
             modelBuilder.Entity<User>()
                         .Property(b => b.IsDeleted)
                         .HasDefaultValue(false);
-
-            //-----------------------------------------------------------------
-            ////address
-
-            modelBuilder.Entity<Governorate>()
-                        .HasMany(a => a.Cities)
-                        .WithOne(c => c.Governorate)
-                        .HasForeignKey(a => a.governorate_id)
-                        .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<City>()
-                        .HasMany(c => c.Properties)
-                        .WithOne(a => a.City)
-                        .HasForeignKey(a => a.CityId)
-                        .OnDelete(DeleteBehavior.NoAction);
-
-
-
-            // Governrate ID 
-            modelBuilder.Entity<Governorate>()
-                        .Property(g => g.Id)
-                        .ValueGeneratedNever();
-
-
-
-            //arabic support
-            //modelBuilder.Entity<Governorate>()
-            //            .Property(b => b.governorate_name_ar)
-            //            .HasColumnType("varchar(max)")
-            //            .UseCollation("LATIN1_GENERAL_100_CI_AS_SC_UTF8")
-            //            .IsUnicode();
-
-            //modelBuilder.Entity<City>()
-            //            .Property(b => b.city_name_ar)
-            //            .HasColumnType("varchar(max)")
-            //            .UseCollation("LATIN1_GENERAL_100_CI_AS_SC_UTF8")
-            //            .IsUnicode();
 
 
         }

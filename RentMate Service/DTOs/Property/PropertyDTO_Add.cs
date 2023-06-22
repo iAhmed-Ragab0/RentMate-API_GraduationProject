@@ -15,8 +15,8 @@ namespace RentMate_Service.DTOs.Property
         public Property_Type PropertyType { get; set; }
         public decimal PropertyPrice { get; set; }
 
-        //public int GovernorateId { get; set; }
-        public int CityId { get; set; }
+        public string Governorate { get; set; }
+        public string City { get; set; }
         public string Street { get; set; }
 
         public string Description { get; set; }
