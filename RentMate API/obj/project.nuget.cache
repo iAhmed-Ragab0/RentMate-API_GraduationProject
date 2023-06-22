@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Hs62KMeAJi5WuovkggwKUTR9QVYaBVLBc/bhZxwseLC3ERgWiib2pmL0DFaVbdmJo4kpu0wCNJ1P/LqLnIqhEQ==",
+  "dgSpecHash": "7LMCKtrsFswilh/W+lFsuzEq7lDelzMWEbh7ykXfyg7HaLQR1sPMExZOXIMAiW9C0m9hDaipdqUi/yeU6eMLUg==",
   "success": true,
-  "projectFilePath": "D:\\ITI\\100- Rent Mate\\RentMate API\\RentMate API\\RentMate API.csproj",
+  "projectFilePath": "D:\\ITI\\1000-RentMate GitHub\\RentMate-API\\RentMate API\\RentMate API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ahmed\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\ahmed\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

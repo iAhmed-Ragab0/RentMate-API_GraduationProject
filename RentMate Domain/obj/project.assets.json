@@ -4213,11 +4213,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ITI\\100- Rent Mate\\RentMate API\\RentMate Domain\\RentMate Domain.csproj",
+      "projectUniqueName": "D:\\ITI\\1000-RentMate GitHub\\RentMate-API\\RentMate Domain\\RentMate Domain.csproj",
       "projectName": "RentMate Domain",
-      "projectPath": "D:\\ITI\\100- Rent Mate\\RentMate API\\RentMate Domain\\RentMate Domain.csproj",
+      "projectPath": "D:\\ITI\\1000-RentMate GitHub\\RentMate-API\\RentMate Domain\\RentMate Domain.csproj",
       "packagesPath": "C:\\Users\\ahmed\\.nuget\\packages\\",
-      "outputPath": "D:\\ITI\\100- Rent Mate\\RentMate API\\RentMate Domain\\obj\\",
+      "outputPath": "D:\\ITI\\1000-RentMate GitHub\\RentMate-API\\RentMate Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ahmed\\AppData\\Roaming\\NuGet\\NuGet.Config",
