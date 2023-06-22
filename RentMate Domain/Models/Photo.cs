@@ -14,7 +14,7 @@ namespace RentMate_Domain.Models
         public string PublicId { get; set; }
 
 
-        // [ForeignKey("Property")]
+         //[ForeignKey("Property")]
         public int PropertyId { get; set; }
 
 
