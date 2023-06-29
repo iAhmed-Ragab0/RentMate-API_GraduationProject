@@ -21,12 +21,17 @@ namespace RentMate_Domain.Constant
             Pending = 2
         }
 
+        public enum PropertyStatus
+        {
+            Pending = 0,
+            Approved = 1
+        }
+
         public enum Property_Type
         {
-
-            Room = 1,
-            Bed = 2,
-            Apartment = 3
+            Apartment = 1,
+            Room = 2,
+            Bed = 3,
         }
     }
 }

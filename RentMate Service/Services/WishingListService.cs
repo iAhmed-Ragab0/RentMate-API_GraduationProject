@@ -6,6 +6,7 @@ using RentMate_Service.DTOs.Appointment;
 using RentMate_Service.DTOs.Property;
 using RentMate_Service.DTOs.WishingList;
 using RentMate_Service.IServices;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,17 @@ namespace RentMate_Service.Services
     {
         private IUnitOfWork _IUnitOfWork;
         private IWishingListRepository _WishingListRepository;
+        private IReviewService _ReviewService;
+        private IPhotoService _PhotoService;
 
-        public WishingListService(IUnitOfWork iUnitOfWork, IWishingListRepository wishingListRepository)
+
+
+        public WishingListService(IUnitOfWork iUnitOfWork, IWishingListRepository wishingListRepository, IReviewService reviewService, IPhotoService photoService)
         {
             _IUnitOfWork = iUnitOfWork;
             _WishingListRepository = wishingListRepository;
+            _ReviewService = reviewService;
+            _PhotoService = photoService;
         }
 
 
@@ -42,12 +49,25 @@ namespace RentMate_Service.Services
             {
                 WishingListDTO_Get wishDTO = new WishingListDTO_Get()
                 {
+                    wishingId = wish.Id,
+                    PropertyId = wish.Property.Id,
+                    Title = wish.Property.Title,
+                    AppartmentArea = wish.Property.AppartmentArea,
+                    AverageRating = _ReviewService.GetAvgRatingForProperty(wish.Property.Id),
+                    City= wish.Property.City.city_name_en,
+                    Governorate = wish.Property.City.Governorate.governorate_name_en,
+                    MainPhotoUrl = await _PhotoService.ReturnMainPhotoForProperty(wish.Property.Id),
+                    NoOfBathroom = wish.Property.NoOfBathroom,
+                    NoOfRooms = wish.Property.NoOfRooms,
+                    PropertyPrice =  wish.Property.PropertyPrice,
+                    PropertyType = wish.Property.PropertyType,
+                    StreetDetails = wish.Property.Street,
 
-                  PropertyTitle = wish.Property.Title,
-                  PropertyId= wish.Property.Id,
-                  //PropertyPhoto = wish.Property.Photos.
-                  PropertyPrice = wish.Property.PropertyPrice,
-                  UserId = wish.UserId
+
+                    OwnerPhoto = wish.Property.Owner.ProfileImg,
+                    OwnerFullName = wish.Property.Owner.FirstName + ' ' + wish.Property.Owner.LastName,
+
+                    
 
                 };
                 allwishingListDTO.Add(wishDTO);
@@ -59,7 +79,7 @@ namespace RentMate_Service.Services
 
         }
         //-----------------------------------------------------------------------
-        //Delete Appointment
+        //Delete Wish
         public async Task<WishingList> DeleteWishByIdAsync(int id)
         {
             WishingList wishingList = await _WishingListRepository.DeleteAsync(id);
@@ -89,7 +109,7 @@ namespace RentMate_Service.Services
 
             await _WishingListRepository.AddAsync(newAppointment);
 
-            //await _IUnitOfWork.Commit();
+            await _IUnitOfWork.Commit();
             return wishDTO;
         }
 

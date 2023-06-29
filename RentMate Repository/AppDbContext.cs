@@ -46,9 +46,9 @@ namespace RentMate_Domain
 
             //STOP the cycling error
             modelBuilder.Entity<User>()
-                        .HasOne(b => b.RentedProperty)
+                        .HasMany(b => b.RentedProperty)
                         .WithOne(b => b.Tenant)
-                        .HasForeignKey<Propertyy>(b => b.TenantId)
+                        .HasForeignKey(b => b.TenantId)
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Propertyy>()
@@ -81,6 +81,11 @@ namespace RentMate_Domain
                         .Property(b => b.IsRented)
                         .HasDefaultValue(false);
 
+            modelBuilder.Entity<Propertyy>()
+                        .HasOne(p => p.Details)
+                        .WithOne(pd => pd.Property)
+                        .HasForeignKey<PropertyDetails>(pd => pd.PropertyId)
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Propertyy>()
                         .Property(b => b.NoOfBedsInTheRoom)
@@ -135,7 +140,20 @@ namespace RentMate_Domain
                         .ValueGeneratedNever();
 
 
+            //-------------------------------------
 
+            modelBuilder.Entity<PropertyDetails>()
+                        .Property(pd => pd.PropertyId)
+                        .IsRequired(false);
+
+
+
+
+
+            //------------------------------------
+
+
+            //------------------------------------
             //arabic support
             //modelBuilder.Entity<Governorate>()
             //            .Property(b => b.governorate_name_ar)

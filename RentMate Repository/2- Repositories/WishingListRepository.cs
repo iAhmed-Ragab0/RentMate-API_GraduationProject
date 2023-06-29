@@ -22,7 +22,9 @@ namespace RentMate_Repository._2__Repositories
             var query = _Context.WishingList
                                .Include(p => p.Property)
                                .Include(p => p.Property.Photos)
-                               .Include(p => p.User)
+                               .Include(p => p.Property.Owner)
+                               .Include(p => p.Property.City)
+                               .Include(p => p.Property.City.Governorate)
                                .Where(a => a.UserId == id);
 
             if (!query.Any())

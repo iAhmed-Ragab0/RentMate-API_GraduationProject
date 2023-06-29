@@ -43,5 +43,24 @@ namespace RentMate_Repository._2__Repositories
             return query;
         }
 
+        public async Task<string> AddProfileImgForUser(string id , string imgUrl)
+        {
+            var query = await _Context.Users.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (query == null)
+            {
+                return null;
+            }
+            else
+            {
+                query.ProfileImg = imgUrl;
+                await _Context.SaveChangesAsync();
+            }
+
+            return query.ProfileImg;
+        }
+
+
+
     }
 }

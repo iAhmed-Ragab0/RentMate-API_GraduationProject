@@ -7,6 +7,7 @@ using RentMate_Service.DTOs.Appointment;
 using RentMate_Service.DTOs.Property;
 using RentMate_Service.DTOs.User;
 using RentMate_Service.IServices;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,20 @@ namespace RentMate_Service.Services
     {
         private IUnitOfWork _IUnitOfWork;
         private IUserRepository _UserRepository;
+        private IPhotoService _PhotoService;
+        private IPropertyRepository _PropertyRepository;
 
-        public UserService(IUnitOfWork iUnitOfWork, IUserRepository userRepository)
+
+
+        public UserService(IUnitOfWork iUnitOfWork,
+            IUserRepository userRepository,
+            IPhotoService photoService,
+            IPropertyRepository propertyRepository)
         {
             _IUnitOfWork = iUnitOfWork;
             _UserRepository = userRepository;
+            _PhotoService = photoService;
+            _PropertyRepository = propertyRepository;
         }
 
         //Get All Users
@@ -135,6 +145,51 @@ namespace RentMate_Service.Services
             await _IUnitOfWork.Commit();
             return true;
         }
+
+
+
+
+        //-----------------------------------------------------------------------------
+        // add profile img for user in db
+        public async Task<bool> AddProfileImgForUserindb(string id,string imgUrl)
+        {
+           var ImgUrl =  await _UserRepository.AddProfileImgForUser(id, imgUrl);
+
+
+            if (ImgUrl == null)
+                return false;
+            else
+                return true;
+        }
+
+        //---------------------------------------------------------
+        //Get User Properties
+        public async Task<List<UserPropertiesDTO_Getall>> GetUserProperties(string userId) 
+        {
+
+            var properties = await _PropertyRepository.GetPropertiesByOwnerIdAsync(userId);
+
+            List<UserPropertiesDTO_Getall> allProperties = new List<UserPropertiesDTO_Getall>();
+
+            foreach (var property in properties)
+            {
+                UserPropertiesDTO_Getall prp = new UserPropertiesDTO_Getall()
+                {
+
+                    PropertyId = property.Id,
+                    mainPhotoUrl = await _PhotoService.ReturnMainPhotoForProperty(property.Id),
+                    PropertyPrice = property.PropertyPrice,
+                    PropertyTitle = property.Title,
+                    Status= property.Status,
+                    
+                };
+
+                allProperties.Add(prp);
+            }
+
+            return allProperties;   
+        }
+
 
     }
 }

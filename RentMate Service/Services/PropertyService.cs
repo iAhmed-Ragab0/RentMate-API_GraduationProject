@@ -2,38 +2,47 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RentMate_Domain;
+using RentMate_Domain.Models;
 using RentMate_Repository._1__IRepositories;
+using RentMate_Repository._2__Repositories;
 using RentMate_Repository.UnitOfWork;
 using RentMate_Service.DTOs;
 using RentMate_Service.DTOs.Property;
+using RentMate_Service.DTOs.Reviews;
 using RentMate_Service.IServices;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RentMate_Service.Services
 {
     public class PropertyService : IPropertyService
     {
-        private AppDbContext _DbContext;
         private IUnitOfWork _IUnitOfWork;
         private IPropertyRepository _PropertyRepository;
         private IPropertyDetailsReopsitory _PropertyDetailsRepository;
+        private IReviewService _ReviewService;
+        private IPhotoService _PhotoService;
+
 
 
         public PropertyService(IUnitOfWork iUnitOfWork,
             IPropertyRepository propertyRepository,
             IPropertyDetailsReopsitory propertyDetailsRepository,
-            AppDbContext dbContext
+            IReviewService reviewService,
+            IPhotoService photoService
             )
         {
             _IUnitOfWork = iUnitOfWork;
             _PropertyRepository = propertyRepository;
             _PropertyDetailsRepository = propertyDetailsRepository;
-            this._DbContext = dbContext;
+            _ReviewService = reviewService;
+        _PhotoService = photoService;
         }
             
 
@@ -54,24 +63,26 @@ namespace RentMate_Service.Services
 
             foreach (var property in properties)
             {
-                PropertyDTO_GetAll prp = new PropertyDTO_GetAll();
+                PropertyDTO_GetAll prp = new PropertyDTO_GetAll()
+                {
+                    StreetDetails = property.Street,
+                    City = property.City.city_name_en,
+                    Governorate = property.City.Governorate.governorate_name_en,
+                    Id = property.Id,
+                    PropertyType = property.PropertyType,
+                    Title = property.Title,
+                    PropertyPrice = property.PropertyPrice,
+                    AppartmentArea = property.AppartmentArea,
+                    NoOfRooms = property.NoOfRooms,
+                    NoOfBathroom = property.NoOfBathroom,
+                    AverageRating = _ReviewService.GetAvgRatingForProperty(property.Id),
+                    MainPhotoUrl = await _PhotoService.ReturnMainPhotoForProperty(property.Id) ,
 
-                prp.Street = property.Street;
-                prp.City = property.City.city_name_en;
-                prp.Governorate = property.City.Governorate.governorate_name_en;
-                prp.Id = property.Id;
-                prp.PropertyType = property.PropertyType;
-                prp.Title = property.Title;
-                prp.Description = property.Description;
-                prp.PropertyPrice = property.PropertyPrice;
-                prp.IsRented = property.IsRented;
-                //prp.AverageRating = AverageRating(property.ID);
+                    // Owner data
+                    OwnerPhoto = property.Owner.ProfileImg,
+                    OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName,
 
-                //prp.MainPhotoUrl = ReturnMainPhoto(property.Photos.ToList());
-
-                // Owner data
-                prp.OwnerPhoto = property.Owner.ProfileImg;
-                prp.OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName;
+                };
 
                 allProperties.Add(prp);
             }
@@ -90,6 +101,8 @@ namespace RentMate_Service.Services
                 p => p.Photos,
                 p => p.Details,
                 p => p.Reviews,
+                p=>p.City,
+                p=>p.City.Governorate
             };
 
             var property = await _PropertyRepository.GetByIdAsync(_id, includes) ?? default;
@@ -97,12 +110,16 @@ namespace RentMate_Service.Services
                 return null;
             else
             {
+
                 PropertyDTO_GetById propOwner = new PropertyDTO_GetById()
                 {
+                    //owner
+                    OwnerId= property.Owner.Id,
                     OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName,
                     OwnerProfileImg = property.Owner.ProfileImg,
                     OwnerEmail = property.Owner.Email,
                     OwnerPhone = property.Owner.PhoneNumber,
+                    OwnerAddress= property.Owner.Address,
 
                     // Property 
                     Id = property.Id,
@@ -110,13 +127,21 @@ namespace RentMate_Service.Services
                     NoOfBedsInTheRoom = property.NoOfBedsInTheRoom,
                     NoOfBedsPerApartment = property.NoOfBedsPerApartment,
                     NoOfRooms = property.NoOfRooms,
-                    City = property.City.city_name_en,
-                    Governorate = property.City.Governorate.governorate_name_en,
                     Description = property.Description,
-                    Street = property.Street,
                     PropertyType = property.PropertyType,
                     IsRented = property.IsRented,
-                    Photos = property.Photos.ToList(),
+                    Photos = (await _PhotoService.GetAllPhotosForProperty(_id))
+                                                  .ToList(),
+                    NoOfBathroom = property.NoOfBathroom,
+                    AppartmentArea = property.AppartmentArea,
+                    FloorNumber= property.FloorNumber,
+                    
+                    //Address
+                    City = property.City.city_name_en,
+                    Governorate = property.City.Governorate.governorate_name_en,
+                    Street = property.Street,
+
+                    //details
                     hasKitchen = property.Details.hasKitchen,
                     hasAirConditioner = property.Details.hasAirConditioner,
                     hasMicrowave = property.Details.hasMicrowave,
@@ -127,9 +152,11 @@ namespace RentMate_Service.Services
                     hasRefrigerator = property.Details.hasRefrigerator,
                     hasWaterHeater = property.Details.hasWaterHeater,
                     PropertyPrice = property.PropertyPrice,
+                    hasElevator = property.Details.hasElevator,
+                        
                     // Reviews
-                    Reviews = property.Reviews.ToList(),
-                    //AverageRating = AverageRating(property.Id),
+                    Reviews = (await _ReviewService.GetAllReviewsForProperty(_id)).ToList(),
+                    AverageRating = _ReviewService.GetAvgRatingForProperty(_id),
                 };
 
                 return propOwner;
@@ -147,23 +174,26 @@ namespace RentMate_Service.Services
 
             foreach (var property in properties)
             {
-                PropertyDTO_GetAll prp = new PropertyDTO_GetAll();
+                PropertyDTO_GetAll prp = new PropertyDTO_GetAll()
+                {
+                    StreetDetails = property.Street,
+                    City = property.City.city_name_en,
+                    Governorate = property.City.Governorate.governorate_name_en,
+                    Id = property.Id,
+                    PropertyType = property.PropertyType,
+                    Title = property.Title,
+                    PropertyPrice = property.PropertyPrice,
+                    AppartmentArea = property.AppartmentArea,
+                    NoOfRooms = property.NoOfRooms,
+                    NoOfBathroom = property.NoOfBathroom,
+                    AverageRating = _ReviewService.GetAvgRatingForProperty(property.Id),
+                    MainPhotoUrl = await _PhotoService.ReturnMainPhotoForProperty(property.Id),
 
-                prp.Id = property.Id;
-                prp.Title = property.Title;
-                prp.PropertyPrice = property.PropertyPrice;
-                prp.PropertyType = property.PropertyType;
-                prp.Governorate = property.City.Governorate.governorate_name_en;
-                prp.City = property.City.city_name_en;
-                prp.Street = property.Street;
-                prp.Description = property.Description;
-                prp.IsRented = property.IsRented;
-                //prp.AverageRating = AverageRating(property.ID);
-                //prp.MainPhotoUrl = ReturnMainPhoto(property.Photos.ToList());
+                    // Owner data
+                    OwnerPhoto = property.Owner.ProfileImg,
+                    OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName,
 
-                // Owner data
-                prp.OwnerPhoto = property.Owner.ProfileImg;
-                prp.OwnerFullName = property.Owner.FirstName + ' ' + property.Owner.LastName;
+                };
 
                 allProperties.Add(prp);
             }
@@ -177,52 +207,69 @@ namespace RentMate_Service.Services
         public async Task<PropertyDTO_Add> AddPropertyAsync(PropertyDTO_Add PropertyDTO)
         {
 
-            Propertyy newProperty = new Propertyy()
-            {
-                OwnerId = PropertyDTO.OwnerId,
-                Title = PropertyDTO.Title,
-                PropertyType = PropertyDTO.PropertyType,
-                PropertyPrice = PropertyDTO.PropertyPrice,
-                //GovernorateId = PropertyDTO.City.Governorate.governorate_name_en,
-                //CityId = PropertyDTO.CityId,
-                Street = PropertyDTO.Street,
-                Description = PropertyDTO.Description,
-                NoOfBedsPerApartment = PropertyDTO.NoOfBedsPerApartment,
-                NoOfBedsInTheRoom = PropertyDTO.NoOfBedsInTheRoom,
-                NoOfRooms = PropertyDTO.NoOfRooms,
-                StripeId = PropertyDTO.StripeId,
-                Amount = PropertyDTO.Amount,
-                IsRented = false,
+
                 
-            };
+            await _IUnitOfWork.BeginTransactionAsync();
 
-            // _DbContext.Add(newProperty);
-            // _DbContext.SaveChanges();
+                try
+                {
+                    var PropDetails = new PropertyDetails()
+                    {
+                        hasAirConditioner = PropertyDTO.hasAirConditioner,
+                        hasMicrowave = PropertyDTO.hasMicrowave,
+                        hasParking = PropertyDTO.hasParking,
+                        hasRefrigerator = PropertyDTO.hasRefrigerator,
+                        hasWifi = PropertyDTO.hasWifi,
+                        hasDishWasher = PropertyDTO.hasDishWasher,
+                        hasWaterHeater = PropertyDTO.hasWaterHeater,
+                        hasKitchen = PropertyDTO.hasKitchen,
+                        hasDishesAndSilverware = PropertyDTO.hasDishesAndSilverware,
+                         hasElevator = PropertyDTO.hasElivator
+                    };
+
+                    Propertyy newProperty = new Propertyy()
+                    {
+                        OwnerId = PropertyDTO.OwnerId,
+                        Title = PropertyDTO.Title,
+                        PropertyType = PropertyDTO.PropertyType,
+                        PropertyPrice = PropertyDTO.PropertyPrice,
+                        CityId = PropertyDTO.CityId,
+                        Street = PropertyDTO.StreetDetails,
+                        Description = PropertyDTO.Description,
+                        NoOfBedsPerApartment = PropertyDTO.NoOfBedsPerApartment,
+                        NoOfBedsInTheRoom = PropertyDTO.NoOfBedsInTheRoom,
+                        AppartmentArea = PropertyDTO.AppartmentArea,
+                        NoOfRooms = PropertyDTO.NoOfRooms,
+                        NoOfBathroom = PropertyDTO.NoOfBathroom,
+                        IsRented = false,
+                        Details = PropDetails,
+                        FloorNumber = PropertyDTO.FloorNumber,
+                        
 
 
-            //PropertyDetails services = new PropertyDetails()
-            //{
-            //    PropertyId = newProperty.Id
-            //};
+                    };
 
-            //_DbContext.AddAsync(services);
-            //await _DbContext.SaveChangesAsync();
+                    var savedProp = await _PropertyRepository.AddAsync(newProperty);
+                    await _IUnitOfWork.Commit();
 
-            //return PropertyDTO;
+                    // Assign the saved PropertyId to PropertyDetails
+                    newProperty.Details.PropertyId = savedProp.Id;
+                    await _IUnitOfWork.Commit();
 
-            await _PropertyRepository.AddAsync(newProperty);
-            await _IUnitOfWork.Commit();
+                    // if stripe done ? 
+                     await _IUnitOfWork.CommitTransactionAsync();
+                    //else
+                    //await _IUnitOfWork.RollbackTransactionAsync();
 
+                    return PropertyDTO;
 
-            PropertyDetails services = new PropertyDetails()
-            {
-                PropertyId = newProperty.Id
-            };
-
-            await _PropertyDetailsRepository.AddAsync(services);
-            await _IUnitOfWork.Commit();
-
-            return PropertyDTO;
+                }
+                catch
+                {
+                    await _IUnitOfWork.RollbackTransactionAsync();
+                    throw; // Rethrow the exception to be handled at the higher level
+                }
+            
 
         }
 
@@ -242,7 +289,7 @@ namespace RentMate_Service.Services
         }
 
         //----------------------------------------------------------------------
-        // Update Property
+        // Update Property 
         public async Task<bool> UpdateProertyByIdAsync(int id , 
             PropertyDTO_Update propertyDTO)
         {
@@ -266,6 +313,20 @@ namespace RentMate_Service.Services
             existingProperty.IsRented = propertyDTO.IsRented;
             existingProperty.NoOfBedsInTheRoom = propertyDTO.NoOfBedsInTheRoom;
             existingProperty.NoOfBedsPerApartment = propertyDTO.NoOfBedsPerApartment;
+            existingProperty.Details.hasKitchen = propertyDTO.hasKitchen;
+            existingProperty.Details.hasAirConditioner = propertyDTO.hasAirConditioner;
+            existingProperty.Details.hasMicrowave = propertyDTO.hasMicrowave;
+            existingProperty.Details.hasDishWasher = propertyDTO.hasMicrowave;
+            existingProperty.Details.hasWifi = propertyDTO.hasWifi;
+            existingProperty.Details.hasRefrigerator = propertyDTO.hasRefrigerator;
+            existingProperty.Details.hasDishesAndSilverware = propertyDTO.hasDishesAndSilverware;
+            existingProperty.Details.hasParking = propertyDTO.hasParking;
+            existingProperty.Details.hasWaterHeater = propertyDTO.hasWaterHeater;
+            existingProperty.Details.hasElevator = propertyDTO.hasElevator;
+
+
+
+
 
             var updatedProperty = await _PropertyRepository
                                         .UpdateAsync<int>(id, existingProperty, p => p.Id);
@@ -274,6 +335,10 @@ namespace RentMate_Service.Services
             return true;
         }
 
+
+
+
+
     }
 
 
@@ -300,33 +365,8 @@ namespace RentMate_Service.Services
 
 
 
-        //function to return the Average Rating
-        //public double AverageRating(int propertyId)
-        //{
-        //    var exists = _ontext.Reviews.FirstOrDefault(b => b.PropertyId == propertyId);
-        //    if (exists == null)
-        //    {
-        //        return 0;
-        //    }
-        //    else
-        //    {
-        //        var avgRating = _context.Reviews.Where(r => r.PropertyId == propertyId).Average(a => a.Rating);
-        //        return avgRating;
-        //    }
-
-        //}
-        //public string ReturnMainPhoto(List<Photo> photos)
-        //{
-        //    foreach (var photo in photos)
-        //    {
-        //        if (photo.IsMain)
-        //        {
-        //            return photo.Url;
-        //        }
-        //    }
-        //    return string.Empty;
-        //}
-    }
+   
+}
 
 
 

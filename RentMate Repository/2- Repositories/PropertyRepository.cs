@@ -27,6 +27,8 @@ namespace RentMate_Repository.Repositories
                                 .AsNoTracking()
                                 .Include(p => p.Owner)
                                 .Include(p => p.Photos)
+                                .Include(p => p.City)
+                                .Include(p => p.City.Governorate)
                                 .Where(a => a.OwnerId == id);
 
             if (!query.Any())

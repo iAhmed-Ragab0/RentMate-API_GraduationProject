@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RentMate_Service.DTOs.Property;
 using RentMate_Service.IServices;
 using RentMate_Service.Services;
 
@@ -16,8 +17,10 @@ namespace RentMate_API.Controllers
             _AdminService = adminService;
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllProperties()
+        //---------------------------------------------------------------------------
+
+        [HttpGet("AllUsers")]
+        public async Task<IActionResult> GetAllUsers()
         {
             try
             {
@@ -32,6 +35,7 @@ namespace RentMate_API.Controllers
 
         }
 
+        //---------------------------------------------------------------------------
         [HttpDelete("soft/{id}")]
         public async Task<ActionResult> SoftDeleteUserById(string id)
         {
@@ -46,6 +50,54 @@ namespace RentMate_API.Controllers
             }
 
 
+        }
+
+        //---------------------------------------------------------------------------
+
+        [HttpGet("AllProperties")]
+        public async Task<IActionResult> GetAllProperties()
+        {
+            try
+            {
+                var result = await _AdminService.GetAllProperties();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        //---------------------------------------------------------------------------
+        [HttpGet("OwnerProperties/{ownerId}")]
+        public async Task<IActionResult> GetPropertiesByOwnerId(string ownerId)
+        {
+            try
+            {
+                var result = await _AdminService.GetPropertiesByOwnerId(ownerId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        //---------------------------------------------------------------------------
+        [HttpGet("property/{propId}")]
+        public async Task<ActionResult<PropertyDTO_GetById>> GetPropertyById(int propId)
+
+        {
+
+            try
+            {
+                var result = await _AdminService.GetPropertyById(propId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

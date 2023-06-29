@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentMate_Service.DTOs;
+using RentMate_Service.DTOs.Photo;
 using RentMate_Service.DTOs.Property;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace RentMate_Service.IServices
                                         (int id , PropertyDTO_Update property);
 
         public Task<Propertyy> DeletePropertyByIdAsync(int id);
+
 
 
 

@@ -279,7 +279,7 @@ namespace RentMate_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PropertyId")
+                    b.Property<int?>("PropertyId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("hasAirConditioner")
@@ -289,6 +289,9 @@ namespace RentMate_Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("hasDishesAndSilverware")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("hasElevator")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("hasKitchen")
@@ -311,7 +314,9 @@ namespace RentMate_Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyId");
+                    b.HasIndex("PropertyId")
+                        .IsUnique()
+                        .HasFilter("[PropertyId] IS NOT NULL");
 
                     b.ToTable("PropertyDetails");
                 });
@@ -324,9 +329,6 @@ namespace RentMate_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("AppartmentArea")
                         .HasColumnType("int");
 
@@ -338,6 +340,9 @@ namespace RentMate_Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FloorNumber")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsRented")
@@ -373,11 +378,10 @@ namespace RentMate_Repository.Migrations
                     b.Property<int>("PropertyType")
                         .HasColumnType("int");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("StripeId")
+                    b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -392,13 +396,9 @@ namespace RentMate_Repository.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("DetailsId");
-
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("TenantId")
-                        .IsUnique()
-                        .HasFilter("[TenantId] IS NOT NULL");
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Properties");
                 });
@@ -648,10 +648,9 @@ namespace RentMate_Repository.Migrations
             modelBuilder.Entity("RentMate_Domain.Models.PropertyDetails", b =>
                 {
                     b.HasOne("RentMate_Domain.Models.Propertyy", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne("Details")
+                        .HasForeignKey("RentMate_Domain.Models.PropertyDetails", "PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Property");
                 });
@@ -664,10 +663,6 @@ namespace RentMate_Repository.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("RentMate_Domain.Models.PropertyDetails", "Details")
-                        .WithMany()
-                        .HasForeignKey("DetailsId");
-
                     b.HasOne("RentMate_Domain.Models.User", "Owner")
                         .WithMany("OwenedPoperty")
                         .HasForeignKey("OwnerId")
@@ -675,13 +670,11 @@ namespace RentMate_Repository.Migrations
                         .IsRequired();
 
                     b.HasOne("RentMate_Domain.Models.User", "Tenant")
-                        .WithOne("RentedProperty")
-                        .HasForeignKey("RentMate_Domain.Models.Propertyy", "TenantId")
+                        .WithMany("RentedProperty")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("City");
-
-                    b.Navigation("Details");
 
                     b.Navigation("Owner");
 
@@ -736,6 +729,9 @@ namespace RentMate_Repository.Migrations
 
             modelBuilder.Entity("RentMate_Domain.Models.Propertyy", b =>
                 {
+                    b.Navigation("Details")
+                        .IsRequired();
+
                     b.Navigation("Photos");
 
                     b.Navigation("Reviews");
@@ -745,8 +741,7 @@ namespace RentMate_Repository.Migrations
                 {
                     b.Navigation("OwenedPoperty");
 
-                    b.Navigation("RentedProperty")
-                        .IsRequired();
+                    b.Navigation("RentedProperty");
 
                     b.Navigation("WishingList");
 

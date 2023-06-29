@@ -268,3 +268,4 @@ D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate API\obj\Debug\net7.0\refint\Re
 D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate API\obj\Debug\net7.0\RentMate API.pdb
 D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate API\obj\Debug\net7.0\RentMate API.genruntimeconfig.cache
 D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate API\obj\Debug\net7.0\ref\RentMate API.dll
+D:\ITI\1000-RentMate GitHub\RentMate-API\RentMate API\bin\Debug\net7.0\CloudinaryDotNet.dll

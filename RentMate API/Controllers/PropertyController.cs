@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RentMate_Domain.Models;
 using RentMate_Repository.IRepositories;
 using RentMate_Repository.UnitOfWork;
+using RentMate_Service.DTOs.Photo;
 using RentMate_Service.DTOs.Property;
 using RentMate_Service.IServices;
+using RentMate_Service.Services;
+using System.Collections.Immutable;
 
 namespace RentMate_API.Controllers
 {
@@ -15,13 +19,18 @@ namespace RentMate_API.Controllers
     {
 
         private readonly IPropertyService _PropertyService;
+        private readonly IPhotoService _PhotoService;
 
-        public PropertyController(IPropertyService propertyService)
+
+        public PropertyController(IPropertyService propertyService, IPhotoService photoService)
         {
-                _PropertyService= propertyService;
+        
+            _PropertyService= propertyService;
+            _PhotoService= photoService;
+
         }
 
-        [HttpGet("all")]
+    [HttpGet("all")]
         public async Task<IActionResult> GetAllProperties()
         {
             try
@@ -37,7 +46,7 @@ namespace RentMate_API.Controllers
 
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<PropertyDTO_GetById>> GetPropertyById(int id)
 
         {
@@ -54,6 +63,7 @@ namespace RentMate_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+
         }
 
         [HttpGet("Owner/{id}")]
@@ -89,7 +99,105 @@ namespace RentMate_API.Controllers
 
         }
 
+        [HttpPost("{propId}/add-photos")]
 
+        public async Task<IActionResult> AddPhotosToProperty(IFormFile file, int propId)
+        {
+            try
+            {
+
+               var property =  await _PropertyService.GetPropertyByIdAsync(propId);
+                if (property == null) return NotFound();
+
+                var result = await _PhotoService.AddPhotoToCloudAsync(file);
+
+                if (result.Error != null) return BadRequest(result.Error.Message);
+                
+                var photo = new Photo 
+                {
+                    Url = result.SecureUri.AbsoluteUri,
+                    PublicId = result.PublicId,
+                    PropertyId= propId
+
+                };
+
+                if(property.Photos.Count == 0 ) 
+                    photo.IsMain= true; 
+                else 
+                    photo.IsMain = false;
+
+                var saved =  await _PhotoService.SavePhotoTodb(photo);  
+                
+
+                if (saved)
+                    return Ok($"image with url = {photo.Url} added succesfully");
+                else
+                    return BadRequest();
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+        [HttpDelete("{photoId}/delete-photo")]
+
+        public async Task<IActionResult> DeletePhotoForProperty( int photoId)
+        {
+            try
+            {
+
+                var photo = await _PhotoService.GetphotoById(photoId);
+                if (photo == null) return NotFound();
+
+                if (photo.IsMain) return BadRequest("You cannot delete your main photo");
+
+
+                if (photo.PublicId != null)
+                {
+                    var result = await _PhotoService.DeletePhotoFromCloudAsync(photo.PublicId);
+
+                    if (result.Error  != null) return BadRequest(result.Error.Message);
+                }
+
+
+                var result2 = await _PhotoService.deletePhotoFromdb(photoId);
+
+                 return Ok($"image with id = {photoId} deleted succesfully");
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("Photos-Update/{propId}")]
+        public async Task<ActionResult<List<photoDTO_Update>>> GetPropertyPhotosForUpdateById(int propId)
+
+        {
+            try
+            {
+                var result = await _PhotoService.GetPropertyPhotos_Update(propId);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
 
         [HttpPut]
         public async Task<ActionResult> UpdatePropertyById(int id ,PropertyDTO_Update property)

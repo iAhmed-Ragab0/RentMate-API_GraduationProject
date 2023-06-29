@@ -17,11 +17,14 @@ namespace RentMate_Service.DTOs.Property
         public decimal PropertyPrice { get; set; }
         public string MainPhotoUrl { get; set; }
 
-        public string Description { get; set; }
+        public int NoOfRooms { get; set; }
+        public int NoOfBathroom { get; set; }
+        public int AppartmentArea { get; set; }
+
         public string Governorate { get; set; }
         public string City { get; set; }
-        public string Street { get; set; }
-        public bool IsRented { get; set; }
+        public string StreetDetails { get; set; }
+
 
 
         //calcaulated

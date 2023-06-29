@@ -207,53 +207,6 @@ namespace RentMate_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TourDay = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TourHour = table.Column<int>(type: "int", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    reservationstatus = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TenantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PropertyId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Appointments_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Appointments_Users_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Photos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsMain = table.Column<bool>(type: "bit", nullable: false),
-                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PropertyId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Photos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Properties",
                 columns: table => new
                 {
@@ -261,6 +214,7 @@ namespace RentMate_Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PropertyType = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     PropertyPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -269,9 +223,8 @@ namespace RentMate_Repository.Migrations
                     NoOfBedsPerApartment = table.Column<int>(type: "int", nullable: false),
                     NoOfBathroom = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     AppartmentArea = table.Column<int>(type: "int", nullable: false),
+                    FloorNumber = table.Column<int>(type: "int", nullable: false),
                     IsRented = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    StripeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TenantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DetailsId = table.Column<int>(type: "int", nullable: true),
@@ -300,6 +253,65 @@ namespace RentMate_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TourDay = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TourHour = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    reservationstatus = table.Column<int>(type: "int", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TenantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PropertyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Properties_PropertyId",
+                        column: x => x.PropertyId,
+                        principalTable: "Properties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Users_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PropertyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_Properties_PropertyId",
+                        column: x => x.PropertyId,
+                        principalTable: "Properties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PropertyDetails",
                 columns: table => new
                 {
@@ -314,7 +326,8 @@ namespace RentMate_Repository.Migrations
                     hasDishesAndSilverware = table.Column<bool>(type: "bit", nullable: true),
                     hasParking = table.Column<bool>(type: "bit", nullable: true),
                     hasWaterHeater = table.Column<bool>(type: "bit", nullable: true),
-                    PropertyId = table.Column<int>(type: "int", nullable: false)
+                    hasElevator = table.Column<bool>(type: "bit", nullable: true),
+                    PropertyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -412,11 +425,6 @@ namespace RentMate_Repository.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Properties_DetailsId",
-                table: "Properties",
-                column: "DetailsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Properties_OwnerId",
                 table: "Properties",
                 column: "OwnerId");
@@ -424,14 +432,14 @@ namespace RentMate_Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_TenantId",
                 table: "Properties",
-                column: "TenantId",
-                unique: true,
-                filter: "[TenantId] IS NOT NULL");
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PropertyDetails_PropertyId",
                 table: "PropertyDetails",
-                column: "PropertyId");
+                column: "PropertyId",
+                unique: true,
+                filter: "[PropertyId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_PropertyId",
@@ -496,43 +504,19 @@ namespace RentMate_Repository.Migrations
                 name: "IX_WishingList_UserId",
                 table: "WishingList",
                 column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Appointments_Properties_PropertyId",
-                table: "Appointments",
-                column: "PropertyId",
-                principalTable: "Properties",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Photos_Properties_PropertyId",
-                table: "Photos",
-                column: "PropertyId",
-                principalTable: "Properties",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Properties_PropertyDetails_DetailsId",
-                table: "Properties",
-                column: "DetailsId",
-                principalTable: "PropertyDetails",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_PropertyDetails_Properties_PropertyId",
-                table: "PropertyDetails");
-
             migrationBuilder.DropTable(
                 name: "Appointments");
 
             migrationBuilder.DropTable(
                 name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "PropertyDetails");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
@@ -569,9 +553,6 @@ namespace RentMate_Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cities");
-
-            migrationBuilder.DropTable(
-                name: "PropertyDetails");
 
             migrationBuilder.DropTable(
                 name: "Users");
