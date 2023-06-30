@@ -17,19 +17,19 @@ namespace RentMate_Repository._2__Repositories
         {
         }
 
-        public async Task<IEnumerable<string>> GetAllCitiesForGovernrate(int GovernrateId)
+        public async Task<IEnumerable<City>> GetAllCitiesForGovernrate(int GovernrateId)
         {
             var query = _Context.Cities
                                 .Where(a => a.governorate_id == GovernrateId);
 
             if (!query.Any())
             {
-                return Enumerable.Empty<string>();
+                return Enumerable.Empty<City>();
             }
 
 
-            var cityNames = await query.Select(a => a.city_name_en).ToListAsync().ConfigureAwait(false);
-            return cityNames;
+            //var cityNames = await query.Select(a => a.city_name_en).ToListAsync().ConfigureAwait(false);
+            return query;
         }
     }
 }

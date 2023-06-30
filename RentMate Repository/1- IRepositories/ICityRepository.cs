@@ -10,7 +10,7 @@ namespace RentMate_Repository._1__IRepositories
 {
     public interface ICityRepository : IGenericRepository<City>
     {
-        public Task<IEnumerable<string>> GetAllCitiesForGovernrate(int GovernrateId);
+        public Task<IEnumerable<City>> GetAllCitiesForGovernrate(int GovernrateId);
 
     }
 }
