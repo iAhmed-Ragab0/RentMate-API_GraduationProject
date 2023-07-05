@@ -128,7 +128,7 @@ namespace RentMate_Service.Services
 
 
         // GET ALL PHOTOS FOR A PROPERTY
-        public async Task<IEnumerable<string>> GetAllPhotosForProperty(int propId)
+        public async Task<IEnumerable<PhotoDTO_Getall>> GetAllPhotosForProperty(int propId)
         {
 
             var PropertyPhotos = await _PhotoRepository.GetPhotosByPropId(propId);
@@ -136,21 +136,25 @@ namespace RentMate_Service.Services
 
             if (PropertyPhotos.Any())
             {
-                List<string> PropertyPhotosList = new List<string>();
+                List<PhotoDTO_Getall> PropertyPhotosList = new List<PhotoDTO_Getall>();
 
                 foreach (var photo in PropertyPhotos)
                 {
-                    var PhotoUrl = photo.Url;
-                    
+                    PhotoDTO_Getall Photo = new PhotoDTO_Getall()
+                    {
 
-                    PropertyPhotosList.Add(PhotoUrl);
+                        PhotoUrl = photo.Url
+
+                    };
+
+                    PropertyPhotosList.Add(Photo);
                 }
 
                 return PropertyPhotosList;
             }
             else
             {
-                return Enumerable.Empty<string>();
+                return Enumerable.Empty<PhotoDTO_Getall>();
             }
 
         }

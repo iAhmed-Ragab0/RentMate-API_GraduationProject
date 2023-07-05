@@ -154,6 +154,8 @@ namespace RentMate_API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors();
+
             app.UseHttpsRedirection();
             
             app.UseAuthentication();

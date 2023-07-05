@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="IServices\IPhotoService.cs~RF38e6700e.TMP" />
+    <None Remove="IServices\IPhotoService.cs~RF844def.TMP" />
     <None Remove="Services\PhotoService.cs~RF20158e3a.TMP" />
     <None Remove="Services\quvvulgu.q3c~" />
     <None Remove="Services\ReviewService.cs~RF1b8e02b8.TMP" />

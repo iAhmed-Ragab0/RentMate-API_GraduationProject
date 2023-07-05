@@ -58,7 +58,7 @@ namespace RentMate_Service.DTOs.Property
 
         //reviews & pics
         public double AverageRating { get; set; }
-        public List<string> Photos { get; set; } 
+        public List<PhotoDTO_Getall> Photos { get; set; } 
         public virtual ICollection<ReviewDTO_GetAll> Reviews { get; set; } = new List<ReviewDTO_GetAll>();
 
     }

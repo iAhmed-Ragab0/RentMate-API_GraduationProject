@@ -15,7 +15,7 @@ namespace RentMate_Service.IServices
         public Task<ImageUploadResult> AddPhotoToCloudAsync(IFormFile file);
         public Task<DeletionResult> DeletePhotoFromCloudAsync(string publicId);
         public Task<bool> SavePhotoTodb(Photo photo);
-        public Task<IEnumerable<string>> GetAllPhotosForProperty(int propId);
+        public Task<IEnumerable<PhotoDTO_Getall>> GetAllPhotosForProperty(int propId);
         public  Task<PhotoDTO_GetById> GetphotoById(int photoId);
         public Task<bool> deletePhotoFromdb(int photoId);
         public Task<IEnumerable<photoDTO_Update>> GetPropertyPhotos_Update(int propId);
