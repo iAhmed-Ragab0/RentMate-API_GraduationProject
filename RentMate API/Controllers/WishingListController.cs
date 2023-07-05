@@ -20,7 +20,7 @@ namespace RentMate_API.Controllers
         }
 
         [HttpGet("User/{user}")]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentOwner([FromRoute] string user)
+        public async Task<ActionResult<IEnumerable<WishingListDTO_Get>>> GetAppointmentOwner([FromRoute] string user)
         {
 
             try
@@ -43,7 +43,7 @@ namespace RentMate_API.Controllers
             if (result != null)
                 return Ok($"Property with id =  {id} is Deleted Succesfully");
             else
-                return BadRequest();
+                return NotFound();
         }
 
         [HttpPost]

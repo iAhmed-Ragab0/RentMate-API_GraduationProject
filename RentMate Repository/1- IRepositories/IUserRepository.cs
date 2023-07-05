@@ -11,6 +11,8 @@ namespace RentMate_Repository._1__IRepositories
     public interface IUserRepository : IGenericRepository<User>
     {
         public  Task<User> SoftDeleteUserByIdAsync(string id);
+        public Task<string> AddProfileImgForUser(string id,string imgUrl);
+
 
     }
 }

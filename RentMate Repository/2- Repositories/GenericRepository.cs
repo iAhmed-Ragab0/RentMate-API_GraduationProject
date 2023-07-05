@@ -45,17 +45,20 @@ namespace RentMate_Repository.Repositories
             }
 
             var entity = await  query
-                .FirstOrDefaultAsync(d => EF.Property<O>(d, "Id").Equals(id));
+                .FirstOrDefaultAsync(d => EF.Property<T>(d, "Id").Equals(id));
 
             return  entity;
 
         }
         public async Task<T> AddAsync(T entity)
         {
-            await _Context.Set<T>().AddAsync(entity);
-            await _Context.SaveChangesAsync();
+            var result = await _Context.Set<T>().AddAsync(entity);
+            ///*var result =*/ await _Context.SaveChangesAsync();
 
-            return entity;
+            if (result != null)
+                return result.Entity;
+            else
+                return null;
         }
 
         public async Task<T> UpdateAsync<O>(O id, T entity, Expression<Func<T, O>> keySelector)
@@ -77,6 +80,10 @@ namespace RentMate_Repository.Repositories
             {
                 _Context.Remove(query);
                 await _Context.SaveChangesAsync();
+            }
+            else 
+            {
+                return null;
             }
 
             return query;

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentMate_Domain;
+using RentMate_Domain.Constant;
 using RentMate_Domain.Models;
 using RentMate_Repository._1__IRepositories;
 using RentMate_Repository._2__Repositories;
@@ -57,10 +58,22 @@ namespace RentMate_API
             }
            );
 
+            //Cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             ///Stripe
             builder.Services.AddStripeInfrastructure(builder.Configuration);
 
+            //Cloudinary
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
             // Add services to the container.
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -82,6 +95,16 @@ namespace RentMate_API
 
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
+
+            builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+            builder.Services.AddScoped<IPhotoService, PhotoService>();
+
+            builder.Services.AddScoped<ICityRepository, CityRepository>();
+            builder.Services.AddScoped<ICityService, CityService>();
+
 
             //Controllers
             builder.Services.AddControllers();
@@ -130,6 +153,8 @@ namespace RentMate_API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
             

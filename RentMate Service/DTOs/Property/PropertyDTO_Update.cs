@@ -19,5 +19,19 @@ namespace RentMate_Service.DTOs.Property
         public bool IsRented { get; set; }
 
 
+        //details
+        public bool? hasKitchen { get; set; }
+        public bool? hasAirConditioner { get; set; }
+        public bool? hasMicrowave { get; set; }
+        public bool? hasDishWasher { get; set; }
+        public bool? hasWifi { get; set; }
+        public bool? hasRefrigerator { get; set; }
+        public bool? hasDishesAndSilverware { get; set; }
+        public bool? hasParking { get; set; }
+        public bool? hasWaterHeater { get; set; }
+        public bool? hasElevator { get; set; }
+
+
+
     }
 }

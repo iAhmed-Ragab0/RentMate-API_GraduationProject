@@ -1,4 +1,6 @@
 ﻿using RentMate_Domain.Models;
+using RentMate_Service.DTOs.Photo;
+using RentMate_Service.DTOs.Reviews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,23 +18,29 @@ namespace RentMate_Service.DTOs.Property
         public string OwnerFullName { get; set; }
         public string OwnerPhone { get; set; }
         public string OwnerEmail { get; set; }
+        public string OwnerAddress { get; set; }
 
         //proprty
         public int? Id { get; set; }
-        public string Title { get; set; }
-        public int? NoOfBedsPerApartment { get; set; }
-        public int? NoOfBedsInTheRoom { get; set; }
-        public int? NoOfRooms { get; set; }
+        public string Title { get; set; }//
+        public int NoOfBedsPerApartment { get; set; }
+        public int NoOfBedsInTheRoom { get; set; }
+        public int NoOfRooms { get; set; }
+        public int NoOfBathroom { get; set; }
+        public int AppartmentArea { get; set; }
+        public int FloorNumber { get; set; }//
+
+        //public bool Furnishing { get; set; }
+
         public string City { get; set; }
         public string Governorate { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; }//
         public string Street { get; set; }
       
-        //to do add enum to the type
+       
         public Property_Type PropertyType { get; set; }
         public bool IsRented { get; set; }
-        public List<Photo> Photos { get; set; } = new List<Photo> { };
-        public decimal PropertyPrice { get; set; }
+        public decimal PropertyPrice { get; set; }//
 
         //Details
         public bool? hasKitchen { get; set; }
@@ -44,11 +52,14 @@ namespace RentMate_Service.DTOs.Property
         public bool? hasDishesAndSilverware { get; set; }
         public bool? hasParking { get; set; }
         public bool? hasWaterHeater { get; set; }
+        public bool? hasElevator { get; set; }
 
 
-        //reviews
+
+        //reviews & pics
         public double AverageRating { get; set; }
-        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public List<PhotoDTO_Getall> Photos { get; set; } 
+        public virtual ICollection<ReviewDTO_GetAll> Reviews { get; set; } = new List<ReviewDTO_GetAll>();
 
     }
 }

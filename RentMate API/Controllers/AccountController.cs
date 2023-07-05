@@ -44,7 +44,7 @@ namespace RentMate_API.Controllers
                 if (result.Succeeded)
                 {
                     await usermanger.AddToRoleAsync(newuser, "User");
-                    return Ok("Created");
+                    return Ok();
                 }
                 else
                 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace RentMate_Domain.Models
 
         //nav property
         public virtual ICollection<Propertyy> OwenedPoperty { get; set; }
-        public virtual Propertyy RentedProperty { get; set; }
+        public virtual ICollection<Propertyy> RentedProperty { get; set; }
         public virtual ICollection<Appointment> appointmentOfOwner { get; set; }
         public virtual ICollection<Appointment> appointmentsOfTenant { get; set; }
         public virtual ICollection<WishingList> WishingList { get; set; }

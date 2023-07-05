@@ -14,7 +14,11 @@ namespace RentMate_Service.IServices
         public Task<User> HardDeleteUserByIdAsync(string id);
         public Task<User> SoftDeleteUserByIdAsync(string id);
         public Task<bool> UpdateUserByIdAsync(string id, UserDTO_Update UserDTO);
+        public Task<bool> AddProfileImgForUserindb(string id, string imgUrl);
+        public Task<List<UserPropertiesDTO_Getall>> GetUserProperties(string userId);
 
+
+        
 
 
 

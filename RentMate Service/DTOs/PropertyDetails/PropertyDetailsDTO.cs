@@ -17,5 +17,6 @@ namespace RentMate_Service.DTOs.PropertyDetails
         public bool? hasDishesAndSilverware { get; set; }
         public bool? hasParking { get; set; }
         public bool? hasWaterHeater { get; set; }
+        public bool? hasElevator { get; set; }
     }
 }
